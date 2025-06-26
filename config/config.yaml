@@ -1,0 +1,12 @@
+artifacts_root: /Users/pparashar21/Desktop/Projects/MLOps/CancerDetectionMLOps/data
+
+data_ingestion:
+  root_dir: /Users/pparashar21/Desktop/Projects/MLOps/CancerDetectionMLOps/data/data_ingestion
+  source_URL: "https://drive.google.com/file/d/1SLW34pnChDpd7sH0b7pTtYBMoo5w6Zxp/view?usp=share_link"
+  local_data_file: /Users/pparashar21/Desktop/Projects/MLOps/CancerDetectionMLOps/data/data_ingestion/images.zip
+  unzip_dir: /Users/pparashar21/Desktop/Projects/MLOps/CancerDetectionMLOps/data/data_ingestion
+
+prepare_base_model:
+  root_dir: /Users/pparashar21/Desktop/Projects/MLOps/CancerDetectionMLOps/data/models
+  base_model_path: /Users/pparashar21/Desktop/Projects/MLOps/CancerDetectionMLOps/data/models/base_model.h5
+  updated_base_model_path: /Users/pparashar21/Desktop/Projects/MLOps/CancerDetectionMLOps/data/models/modified_base_model.h5

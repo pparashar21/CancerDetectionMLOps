@@ -1,4 +1,8 @@
 tensorflow
+kaggle==1.7.4.5
+kagglehub==0.3.12
+boto3==1.38.43
+dotenv==0.9.9
 pandas
 gdown
 dvc
@@ -16,4 +20,4 @@ types-PyYAML
 scipy
 Flask
 Flask-Cors
--e .
+streamlit
