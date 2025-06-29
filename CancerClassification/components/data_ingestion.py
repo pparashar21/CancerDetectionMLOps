@@ -1,42 +1,51 @@
+import sys
 import os
 import zipfile
-import gdown
-from CancerClassification.utils import logger
-from CancerClassification.utils.utility import get_size
-from CancerClassification.entity.config_entity import (DataIngestionConfig)
+import boto3
+from kaggle.api.kaggle_api_extended import KaggleApi
+from dotenv import load_dotenv, find_dotenv
+load_dotenv(find_dotenv())
+parent_dir = os.path.abspath(os.path.join(os.getcwd(), '..'))
+if parent_dir not in sys.path:
+    sys.path.insert(0, parent_dir)
+from CancerClassification.utils.logger import logging
+from CancerClassification.utils.exception_handler import ExceptionHandler
+from CancerClassification.constants import *
+from CancerClassification.entity.config_entity import DataIngestionConfig
 
 class DataIngestion:
     def __init__(self, config: DataIngestionConfig):
         self.config = config
+        self.api = KaggleApi()
+        self.api.authenticate()
 
-    def download_file(self) -> str:
-        """ 
-        Fetch data from url
-        """
-
+    def download_data_local(self) -> None:
         try:
-            url = self.config.source_URL
-            zip_file = self.config.local_data_file
+            logging.info("Starting local download of .zip")
+            self.api.dataset_download_files(KAGGLE_DATASET_SLUG, path=ROOT_DIR, unzip=False)
+            logging.info("Local download done!")
+        except Exception as e:
+            logging.error(ExceptionHandler(e, sys))
 
-            os.makedirs("data/data_ingestion", exist_ok=True)
-            logger.info(f"Downloading data from {url} into file {zip_file}")
-
-            file_id = url.split("/")[-2]
-            prefix = "https://drive.google.com/uc?/export=download&id="
-            gdown.download(prefix+file_id, zip_file)
-            logger.info(f"Downloaded data from {url} into file {zip_file}")
+    def upload_to_S3(self) -> None:
+        try:
+            logging.info('Starting data upload to S3')
+            s3 = boto3.client('s3')
+            with zipfile.ZipFile(ZIP_PATH, 'r') as zip_ref:
+                for file_info in zip_ref.infolist():
+                    if file_info.is_dir():
+                        continue
+                    file_data = zip_ref.read(file_info.filename)
+                    s3_key = os.path.join(DATA_INGESTION_FOLDER_KEY, file_info.filename).replace("\\", "/")
+                    s3.put_object(Bucket=AWS_BUCKET, Key=s3_key, Body=file_data)
+            
+            os.remove(ZIP_PATH)
+            logging.info(f"Uploaded data sucessfully to {s3_key}!")
 
         except Exception as e:
-            raise e
+            logging.error(ExceptionHandler(e, sys))
 
-    def extract_zip_file(self):
-        """
-        unzip_dir : str
-        Extracts the zip file into the data directory
-        Returns none
-        """
-        unzip_path = self.config.unzip_dir
-        os.makedirs(unzip_path, exist_ok=True)
 
-        with zipfile.ZipFile(self.config.local_data_file, 'r') as zip_ref:
-            zip_ref.extractall(unzip_path)
+if __name__ == "__main__":
+    #to write test cases here...
+    pass

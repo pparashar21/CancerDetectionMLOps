@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "CancerClassification"
+version = "0.0.0"
+description = "Python package for multi-class cancer classification"
+readme = "README.md"
+requires-python = ">=3.7"
+authors = [
+  { name = "pparashar21", email = "prasoonparashar21@gmail.com" }
+]
+urls = { "Homepage" = "https://github.com/pparashar21/CancerDetectionMLOps", "Bug Tracker" = "https://github.com/pparashar21/CancerDetectionMLOps/issues" }
+
+[tool.setuptools]
+package-dir = { "" = "." }
+
+[tool.setuptools.packages.find]
+where = ["."]

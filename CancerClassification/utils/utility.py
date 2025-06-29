@@ -16,34 +16,6 @@ import base64
 from CancerClassification.constants import *
 from CancerClassification.utils.logger import logging
 from CancerClassification.utils.exception_handler import ExceptionHandler
-
-def get_data_from_kaggle(file_name:str) -> pd.DataFrame:
-    """
-    Downloading a kaggle dataset as a Pandas DataFrame
-    
-    Args:
-        file_name (str): The file name to be downloaded from Kaggle inside the mentioned KAGGLE_DATASET_SLUG
-
-    Returns:
-        df (pd.DataFrame) : The downloaded DataFrame from Kaggle
-    """
-    pass
-    try:
-        logging.info(f"Extracting {file_name} from Kaggle")
-        df = kagglehub.dataset_load(
-            KaggleDatasetAdapter.PANDAS,
-            KAGGLE_DATASET_SLUG,
-            file_name,
-        )
-        logging.info(f"Shape of the dataframe: {df.shape}")
-        logging.info(f"Column names: {df.columns}")
-        logging.info(f"Preview of the DataFrame:\n{df.head()}")
-        logging.info("Data fetched successfully from Kaggle.")
-        
-        return df
-    except Exception as e:
-        logging.error(ExceptionHandler(e,sys))
-        raise ExceptionHandler(e, sys)
     
 @ensure_annotations
 def read_yaml(path: Path) -> ConfigBox:
