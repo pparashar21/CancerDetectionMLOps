@@ -21,3 +21,4 @@ scipy
 Flask
 Flask-Cors
 streamlit
+-e .
