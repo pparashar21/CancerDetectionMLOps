@@ -2,7 +2,10 @@ import sys
 import os
 import zipfile
 import boto3
-from kaggle.api.kaggle_api_extended import KaggleApi
+try:
+    from kaggle.api.kaggle_api_extended import KaggleApi
+except:
+    KaggleApi = None
 from dotenv import load_dotenv, find_dotenv
 load_dotenv(find_dotenv())
 parent_dir = os.path.abspath(os.path.join(os.getcwd(), '..'))
@@ -16,11 +19,14 @@ from CancerClassification.entity.config_entity import DataIngestionConfig
 class DataIngestion:
     def __init__(self, config: DataIngestionConfig):
         self.config = config
-        self.api = KaggleApi()
-        self.api.authenticate()
+        self.api = None
 
     def download_data_local(self) -> None:
         try:
+            if KaggleApi is None:
+                    raise ImportError ("KaggleApi could not be imported. Possibly running in CI environment.")
+            self.api = KaggleApi()
+            self.api.authenticate()
             logging.info("Starting local download of .zip")
             self.api.dataset_download_files(KAGGLE_DATASET_SLUG, path=ROOT_DIR, unzip=False)
             logging.info("Local download done!")
@@ -45,7 +51,3 @@ class DataIngestion:
         except Exception as e:
             logging.error(ExceptionHandler(e, sys))
 
-
-if __name__ == "__main__":
-    #to write test cases here...
-    pass
