@@ -22,4 +22,6 @@ Flask
 Flask-Cors
 streamlit
 pytest==8.4.1
+opencv_python==4.11.0.86
+patchify==0.2.3
 -e .
