@@ -2,7 +2,10 @@ import sys
 import os
 import zipfile
 import boto3
-from kaggle.api.kaggle_api_extended import KaggleApi
+try:
+    from kaggle.api.kaggle_api_extended import KaggleApi
+except:
+    KaggleApi = None
 from dotenv import load_dotenv, find_dotenv
 load_dotenv(find_dotenv())
 parent_dir = os.path.abspath(os.path.join(os.getcwd(), '..'))
@@ -20,6 +23,8 @@ class DataIngestion:
 
     def download_data_local(self) -> None:
         try:
+            if KaggleApi is None:
+                    raise ImportError ("KaggleApi could not be imported. Possibly running in CI environment.")
             self.api = KaggleApi()
             self.api.authenticate()
             logging.info("Starting local download of .zip")
@@ -46,7 +51,3 @@ class DataIngestion:
         except Exception as e:
             logging.error(ExceptionHandler(e, sys))
 
-
-if __name__ == "__main__":
-    #to write test cases here...
-    pass
