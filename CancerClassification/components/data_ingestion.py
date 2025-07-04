@@ -16,10 +16,11 @@ from CancerClassification.entity.config_entity import DataIngestionConfig
 class DataIngestion:
     def __init__(self, config: DataIngestionConfig):
         self.config = config
-        self.api = KaggleApi()
+        self.api = None
 
     def download_data_local(self) -> None:
         try:
+            self.api = KaggleApi()
             self.api.authenticate()
             logging.info("Starting local download of .zip")
             self.api.dataset_download_files(KAGGLE_DATASET_SLUG, path=ROOT_DIR, unzip=False)
