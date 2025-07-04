@@ -2,7 +2,7 @@ name: Tests for deployment
 
 on:
   push:
-    branches: [ main ]
+    branches: [ "*" ]
   pull_request:
     branches: [ main ]
 
@@ -25,4 +25,4 @@ jobs:
 
       - name: Run Pytests
         run: |
-          pytest CancerClassification/testing/
+          pytest testing/
