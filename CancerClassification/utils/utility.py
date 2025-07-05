@@ -1,126 +1,220 @@
-# Contains functionalities that we will use frequenlty
-import pandas as pd
 import os
 import sys
-from box.exceptions import BoxValueError
-import kagglehub
-from kagglehub import KaggleDatasetAdapter
+import boto3
 import yaml
-import json
-import joblib
+import cv2
+import numpy as np
+import tensorflow as tf
+import matplotlib.pyplot as plt
+from matplotlib import gridspec
+from patchify import patchify
+from sklearn.model_selection import train_test_split
+from typing import Tuple, List, Dict, Union
 from ensure import ensure_annotations
 from box import ConfigBox
-from pathlib import Path
-from typing import Any
-import base64
+from box.exceptions import BoxValueError
+from functools import partial
+
 from CancerClassification.constants import *
 from CancerClassification.utils.logger import logging
 from CancerClassification.utils.exception_handler import ExceptionHandler
-    
-@ensure_annotations
-def read_yaml(path: Path) -> ConfigBox:
-    """
-    Reads YAML file and returns ConfigBox
-    Error handling: Check for empty yaml file
-    """
 
+@ensure_annotations
+def read_yaml(path: str) -> ConfigBox:
+    """
+    Reads a YAML file and returns a ConfigBox dictionary.
+
+    Args:
+        path (str): Path to the YAML file.
+
+    Returns:
+        ConfigBox: Parsed configuration.
+    """
     try:
         with open(path) as yaml_file:
             content = yaml.safe_load(yaml_file)
-            logging.info(f"YAML file : {path} loaded successfully")
+            logging.info(f"YAML file loaded successfully from: {path}")
             return ConfigBox(content)
     except BoxValueError:
-        raise ValueError("YAML file is empty")
+        raise ValueError("YAML file is empty or malformed")
     except Exception as e:
         raise e
-    
-@ensure_annotations
-def create_directories(paths:list, log=True):
-    """
-    Create list of directories
-
-    paths : List of paths of directories to be created
-    log : To choose to print to log or not, by default it will print (True)
-    """
-
-    for p in paths:
-        os.makedirs(p, exist_ok = True)
-        if log:
-            logging.info(f"Directory created at path : {p}")
-
 
 @ensure_annotations
-def save_json(path:Path, data:dict):
+def get_class_names(bucket_name: str, root_key: str) -> list:
     """
-    Save json files
+    Retrieves class names from the given S3 bucket prefix.
 
-    path : path to store json objects
-    data : dictionary storing our json data
+    Args:
+        bucket_name (str): Name of the S3 bucket.
+        root_key (str): Root prefix path in the S3 bucket.
+
+    Returns:
+        List[str]: List of class folder names.
     """
+    s3 = boto3.client("s3")
+    class_names = []
 
-    with open(path, "w") as f:
-        json.dump(data, f, indent=2)
+    response = s3.list_objects_v2(Bucket=bucket_name, Prefix=root_key, Delimiter="/")
 
-    logging.info(f"JSON file stored at path : {path}")
+    if "CommonPrefixes" in response:
+        for folder in response['CommonPrefixes']:
+            top_level_folder = folder['Prefix'].split("/")[-2]
+            if top_level_folder != "ALL":
+                inner_prefix = folder["Prefix"]
+                inner_response = s3.list_objects_v2(Bucket=bucket_name, Prefix=inner_prefix, Delimiter="/")
+                if "CommonPrefixes" in inner_response:
+                    for subfolder in inner_response["CommonPrefixes"]:
+                        class_name = subfolder["Prefix"].split("/")[-2]
+                        class_names.append(class_name)
+
+    return class_names
 
 @ensure_annotations
-def load_json(path : Path) -> ConfigBox:
+def load_hyperparameters(path: str, s3_bucket: str, data_folder: str) -> dict:
     """
-    Load json files and store as ConfigBix data type
+    Loads hyperparameters from YAML and appends computed fields.
 
-    path : path o the required JSON
+    Args:
+        path (str): Path to YAML file.
+        s3_bucket (str): S3 bucket to fetch class names.
+        data_folder (str): Folder inside S3 bucket for training data.
+
+    Returns:
+        Dict: Dictionary with hyperparameters.
     """
+    with open(path, 'r') as f:
+        hp = yaml.safe_load(f)
 
-    with open(path) as f:
-        content = json.load(f)
-
-    logging.info(f"JSON object loaded successfully from path : {path}")
-    return ConfigBox(content)
+    hp["NUM_PATCHES"] = (hp["IMAGE_SIZE"] ** 2) // (hp["PATCH_SIZE"] ** 2)
+    hp["FLAT_PATCHES_SHAPE"] = (
+        hp["NUM_PATCHES"],
+        hp["PATCH_SIZE"] * hp["PATCH_SIZE"] * hp["NUM_CHANNELS"]
+    )
+    hp["CLASS_NAMES"] = get_class_names(bucket_name=s3_bucket, root_key=data_folder)
+    return hp
 
 @ensure_annotations
-def save_binary(data : Any, path : Path):
+def get_image_paths_from_s3(bucket_name: str, root_prefix: str, split: float = 0.09) -> tuple:
     """
-    Save binary files 
+    Fetches and splits S3 image paths into train, validation, and test sets.
 
-    data : data of the binary file
-    path : path to store the binary file
+    Args:
+        bucket_name (str): S3 bucket name.
+        root_prefix (str): Prefix for images.
+        split (float): Split ratio for validation and test.
+
+    Returns:
+        Tuple[List[str], List[str], List[str]]: Train, validation, and test image paths.
     """
+    s3 = boto3.client("s3")
+    paginator = s3.get_paginator("list_objects_v2")
+    image_paths = []
 
-    joblib.dump(value = data, filename = path)
-    logging.info(f"Binary file saved at path : {path}")
+    for page in paginator.paginate(Bucket=bucket_name, Prefix=root_prefix):
+        for obj in page.get("Contents", []):
+            key = obj["Key"]
+            if not key.endswith("/"):
+                parts = key[len(root_prefix):].split("/")
+                if len(parts) >= 3 and parts[0] != "ALL":
+                    image_paths.append(f"s3://{bucket_name}/{key}")
+
+    split_count = int(len(image_paths) * split)
+    train, valid = train_test_split(image_paths, test_size=split_count, random_state=42)
+    train, test = train_test_split(train, test_size=split_count, random_state=42)
+    return train, valid, test
 
 @ensure_annotations
-def load_binary(path: Path) -> Any:
-    """ 
-    Load binary files
-
-    path : path of the binary file to be loaded
+def process_image_label(s3_path: Union[str, bytes], hp: dict) -> tuple:
     """
+    Processes a single image from S3 and returns patches and class index.
 
-    data = joblib.load(path)
-    logging.info(f"Loaded binary file from path : {path}")
-    return data
+    Args:
+        s3_path (str): S3 path of the image.
+        hp (dict): Hyperparameters.
 
-@ensure_annotations
-def get_size(path : Path) -> str:
+    Returns:
+        Tuple[np.ndarray, np.ndarray]: Image patches and class index.
     """
-    Get the size of a file in KB
+    s3_path = s3_path.decode() if isinstance(s3_path, bytes) else s3_path
+    assert s3_path.startswith("s3://"), "Path must be an S3 URI."
 
-    path : path to the source file
+    s3 = boto3.client("s3")
+    _, _, bucket, *key_parts = s3_path.split("/")
+    key = "/".join(key_parts)
+
+    response = s3.get_object(Bucket=bucket, Key=key)
+    image_bytes = response["Body"].read()
+    image_array = np.frombuffer(image_bytes, np.uint8)
+    image = cv2.imdecode(image_array, cv2.IMREAD_COLOR)
+
+    image = cv2.resize(image, (hp["IMAGE_SIZE"], hp["IMAGE_SIZE"])) / 255.0
+    patch_shape = (hp["PATCH_SIZE"], hp["PATCH_SIZE"], hp["NUM_CHANNELS"])
+    patches = patchify(image, patch_shape, step=hp["PATCH_SIZE"])
+    patches = np.reshape(patches, hp["FLAT_PATCHES_SHAPE"]).astype(np.float32)
+
+    class_name = key_parts[-2]
+    class_idx = np.array(hp["CLASS_NAMES"].index(class_name), dtype=np.int32)
+    return patches, class_idx
+
+def parse_fn_factory(hp: dict):
     """
+    Creates a parse function for TF datasets using provided hyperparameters.
 
-    size_kb = round(os.path.getsize(path)/1024)
-    return f"{size_kb} KB"
+    Args:
+        hp (dict): Hyperparameters used in image processing.
 
-@ensure_annotations
-def decodeImage(imgstr, file):
-    imgdata = base64.b64decode(imgstr)
-    with open(file, 'wb') as f:
-        f.write(imgdata)
-        f.close()
+    Returns:
+        Callable[[tf.Tensor], Tuple[tf.Tensor, tf.Tensor]]
+    """
+    wrapped_func = partial(process_image_label, hp=hp)
 
-# To pass from html to base64
-@ensure_annotations
-def encodeImage(croppedImgPath):
-    with open(croppedImgPath, "rb") as f:
-        return base64.b64encode(f.read())    
+    def parse(path: tf.Tensor) -> tuple:
+        patches, label = tf.numpy_function(
+            func=wrapped_func,
+            inp=[path],
+            Tout=[tf.float32, tf.int32]
+        )
+        label = tf.one_hot(label, hp["NUM_CLASSES"])
+        patches.set_shape(hp["FLAT_PATCHES_SHAPE"])
+        label.set_shape([hp["NUM_CLASSES"]])
+        return patches, label
+
+    return parse
+
+def tf_dataset(images: List[str], hp: dict, batch_size: int = 32) -> tf.data.Dataset:
+    """
+    Converts image paths to a TensorFlow dataset pipeline.
+
+    Args:
+        images (List[str]): List of S3 image paths.
+        hp (dict): Hyperparameters.
+        batch_size (int): Batch size.
+
+    Returns:
+        tf.data.Dataset: Prepared TensorFlow dataset.
+    """
+    parse_fn = parse_fn_factory(hp) 
+    ds = tf.data.Dataset.from_tensor_slices(images)
+    ds = ds.map(parse_fn, num_parallel_calls=tf.data.AUTOTUNE)
+    ds = ds.batch(batch_size).prefetch(tf.data.AUTOTUNE)
+    return ds
+
+def visualise_patches(patches: np.ndarray, patch_size: int = 64, num_channels: int = 3) -> None:
+    """
+    Visualises the first 64 patches of a given image.
+
+    Args:
+        patches (np.ndarray): Flattened patch tensor.
+        patch_size (int): Size of each patch.
+        num_channels (int): Number of channels (e.g., 3 for RGB).
+    """
+    reshaped_patches = patches[:64].reshape((-1, patch_size, patch_size, num_channels))
+    fig = plt.figure(figsize=(10, 10))
+    gs = gridspec.GridSpec(8, 8)
+    for i in range(64):
+        ax = plt.subplot(gs[i])
+        ax.imshow(reshaped_patches[i])
+        ax.axis("off")
+    plt.tight_layout()
+    plt.show()

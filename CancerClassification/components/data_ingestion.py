@@ -28,7 +28,7 @@ class DataIngestion:
             self.api = KaggleApi()
             self.api.authenticate()
             logging.info("Starting local download of .zip")
-            self.api.dataset_download_files(KAGGLE_DATASET_SLUG, path=ROOT_DIR, unzip=False)
+            self.api.dataset_download_files(self.config.kaggle_dataset_slug, path=ROOT_DIR, unzip=False)
             logging.info("Local download done!")
         except Exception as e:
             logging.error(ExceptionHandler(e, sys))
@@ -42,8 +42,8 @@ class DataIngestion:
                     if file_info.is_dir():
                         continue
                     file_data = zip_ref.read(file_info.filename)
-                    s3_key = os.path.join(DATA_INGESTION_FOLDER_KEY, file_info.filename).replace("\\", "/")
-                    s3.put_object(Bucket=AWS_BUCKET, Key=s3_key, Body=file_data)
+                    s3_key = os.path.join(self.config.s3_data_key, file_info.filename).replace("\\", "/")
+                    s3.put_object(Bucket=self.config.s3_bucket, Key=s3_key, Body=file_data)
             
             os.remove(ZIP_PATH)
             logging.info(f"Uploaded data sucessfully to {s3_key}!")
