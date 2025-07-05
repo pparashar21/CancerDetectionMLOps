@@ -1,12 +1,39 @@
+from unittest.mock import patch, MagicMock
 import pytest
 import tensorflow as tf
-
 from CancerClassification.components.data_preparation import DataPreparation
 from CancerClassification.config.configuration import configManager
 
-
 @pytest.fixture(scope="module")
-def data_preparation_outputs():
+@patch("CancerClassification.utils.utility.get_image_paths_from_s3")
+@patch("CancerClassification.utils.utility.load_hyperparameters")
+def data_preparation_outputs(mock_load_hyperparameters, mock_get_image_paths_from_s3):
+    # Mock return values
+    mock_load_hyperparameters.return_value = {
+        "IMAGE_SIZE": 512,
+        "NUM_CHANNELS": 3,
+        "PATCH_SIZE": 64,
+        "BATCH_SIZE": 2,
+        "LEARNING_RATE": "1e-4",
+        "EPOCHS": 30,
+        "NUM_CLASSES": 2,
+        "NUM_LAYERS": 12,
+        "HIDDEN_DIM": 512,
+        "MLP_DIM": 3072,
+        "NUM_HEADS": 12,
+        "DROPOUT_RATE": 0.1,
+        "NUM_PATCHES": 64,
+        "FLAT_PATCHES_SHAPE": (64, 12288),
+        "CLASS_NAMES": ["class_0", "class_1"]
+    }
+
+    # Mock 3 image paths
+    mock_get_image_paths_from_s3.return_value = (
+        ["mock_s3_path_1.jpg", "mock_s3_path_2.jpg"],
+        ["mock_s3_path_3.jpg"],
+        ["mock_s3_path_4.jpg"]
+    )
+
     config = configManager().get_data_preparation_config()
     dp = DataPreparation(config)
     train_ds, valid_ds, test_ds, class_names = dp.run()
