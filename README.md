@@ -58,6 +58,6 @@ python main.py
 ```
 
 Make sure your environment variables are set up for:
-	•	Kaggle API key (kaggle.json)
-	•	AWS credentials (~/.aws/credentials or environment variables)
+- Kaggle API key (kaggle.json)
+- AWS credentials (~/.aws/credentials or environment variables)
 
