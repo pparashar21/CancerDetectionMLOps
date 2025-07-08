@@ -1,7 +1,7 @@
 import sys
 from CancerClassification.utils.logger import logging
 from CancerClassification.utils.exception_handler import ExceptionHandler
-from CancerClassification.pipeline.stage1_data_ingestion import DataIngestionTrainingPipeline
+# from CancerClassification.pipeline.data_ingestion import DataIngestionTrainingPipeline
 
 STAGE_NAME = "Data Ingestion Stage"
 

@@ -1,14 +1,12 @@
-IMAGE_SIZE: 512
-NUM_CHANNELS: 3
-PATCH_SIZE: 64
-# hp['num_patches'] = (hp['image_size']**2) // (hp["patch_size"]**2)
-# hp["flat_patches_shape"] = (hp["num_patches"], hp['patch_size']*hp['patch_size']*hp["num_channels"])
-BATCH_SIZE: 32
-LEARNING_RATE: 1e-4
-EPOCHS: 30
-NUM_CLASSES: 22
-NUM_LAYERS: 12
-HIDDEN_DIM: 512
-MLP_DIM: 3072
-NUM_HEADS: 12
-DROPOUT_RATE: 0.1
+data_ingestion:
+  kaggle_dataset_slug: "obulisainaren/multi-cancer"
+  kaggle_folder_name: "Multi Cancer/Multi Cancer/"
+  s3_bucket: "multi-cancer-mlops-prasoon"
+  s3_data_key: "Data"
+
+data_preparation:
+  s3_bucket: "multi-cancer-mlops-prasoon"
+  s3_data_key: "Data"
+  class_structure: "Multi Cancer/Multi Cancer/"
+  split_ratio: 0.09
+  local_splits_dir: "/Users/pparashar21/Desktop/Projects/CancerDetectionMLOps/Artifacts/train_test_splits/"
