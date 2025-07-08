@@ -38,6 +38,8 @@ The project follows a standard MLOps pipeline architecture: ![Workflow Diagram](
 
 `pytest testing/ -v`
 
+--- 
+
 ## Sample Usage
 
 Clone the repository and run the main pipeline: 
@@ -54,4 +56,8 @@ pip install -r requirements.txt
 # Run the full pipeline
 python main.py
 ```
+
+Make sure your environment variables are set up for:
+	•	Kaggle API key (kaggle.json)
+	•	AWS credentials (~/.aws/credentials or environment variables)
 
