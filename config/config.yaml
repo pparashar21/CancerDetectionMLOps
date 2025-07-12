@@ -10,3 +10,7 @@ data_preparation:
   class_structure: "Multi Cancer/Multi Cancer/"
   split_ratio: 0.09
   local_splits_dir: "/Users/pparashar21/Desktop/Projects/CancerDetectionMLOps/Artifacts/train_test_splits/"
+
+model_trainer:
+  model_name: "MultiCancerCNN.h5"
+  csv_path: "MultiCancerCNN.csv"

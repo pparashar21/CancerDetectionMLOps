@@ -1,0 +1,10 @@
+[ 2025-07-12 18:38:35,631 ] 36 root - INFO - YAML file loaded successfully from: /Users/pparashar21/Desktop/Projects/CancerDetectionMLOps/config/config.yaml
+[ 2025-07-12 18:38:35,633 ] 36 root - INFO - YAML file loaded successfully from: /Users/pparashar21/Desktop/Projects/CancerDetectionMLOps/config/params.yaml
+[ 2025-07-12 18:38:38,668 ] 36 root - INFO - YAML file loaded successfully from: /Users/pparashar21/Desktop/Projects/CancerDetectionMLOps/config/config.yaml
+[ 2025-07-12 18:38:38,669 ] 36 root - INFO - YAML file loaded successfully from: /Users/pparashar21/Desktop/Projects/CancerDetectionMLOps/config/params.yaml
+[ 2025-07-12 18:38:38,669 ] 27 root - INFO - Starting data preparation pipeline...
+[ 2025-07-12 18:38:38,699 ] 1352 botocore.credentials - INFO - Found credentials in shared credentials file: ~/.aws/credentials
+[ 2025-07-12 18:38:43,207 ] 36 root - INFO - Hyperparameters loaded and computed successfully.
+[ 2025-07-12 18:39:10,152 ] 48 root - INFO - Image paths fetched and split successfully from S3.
+[ 2025-07-12 18:39:10,275 ] 59 root - INFO - TensorFlow datasets created successfully.
+[ 2025-07-12 18:39:10,275 ] 64 root - INFO -  Data preparation pipeline completed successfully.
