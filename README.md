@@ -48,9 +48,13 @@ Clone the repository and run the main pipeline:
 git clone https://github.com/pparashar21/CancerDetectionMLOps.git
 cd CancerDetectionMLOps
 
-# (Optional) Create a virtual environment
 python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+
+source venv/bin/activate  
+
+#SageMaker
+sudo yum install -y libgit2 libgit2-devel
+
 pip install -r requirements.txt
 
 # Run the full pipeline

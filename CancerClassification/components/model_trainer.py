@@ -28,6 +28,7 @@ from CancerClassification.components.model_builder import build_ViT
 class ModelTrainer:
     def __init__(self, train_ds, val_ds, test_ds, class_names):
         self.cfg_mgr = configManager()
+        self.dp_cfg = self.cfg_mgr.get_data_preparation_config()
         self.cfg = self.cfg_mgr.get_model_trainer_config()
         self.hp = load_hyperparameters(
             PARAMS_FILE_PATH,
