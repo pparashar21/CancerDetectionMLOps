@@ -19,7 +19,6 @@ class DataPreparationConfig:
 
 @dataclass
 class ModelTrainerConfig:
-    train_ds: tf.data.Dataset
-    valid_ds: tf.data.Dataset
-    test_ds: tf.data.Dataset
-    class_names: list[str]
+    s3_bucket:str
+    s3_model_path: str
+    s3_model_csv:str
