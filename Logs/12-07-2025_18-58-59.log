@@ -1,5 +1,0 @@
-[ 2025-07-12 18:59:03,637 ] 36 root - INFO - YAML file loaded successfully from: /Users/pparashar21/Desktop/Projects/CancerDetectionMLOps/config/config.yaml
-[ 2025-07-12 18:59:03,638 ] 36 root - INFO - YAML file loaded successfully from: /Users/pparashar21/Desktop/Projects/CancerDetectionMLOps/config/params.yaml
-[ 2025-07-12 18:59:03,638 ] 36 root - INFO - YAML file loaded successfully from: /Users/pparashar21/Desktop/Projects/CancerDetectionMLOps/config/config.yaml
-[ 2025-07-12 18:59:03,639 ] 36 root - INFO - YAML file loaded successfully from: /Users/pparashar21/Desktop/Projects/CancerDetectionMLOps/config/params.yaml
-[ 2025-07-12 18:59:03,652 ] 1352 botocore.credentials - INFO - Found credentials in shared credentials file: ~/.aws/credentials
