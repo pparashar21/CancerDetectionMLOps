@@ -22,3 +22,9 @@ class ModelTrainerConfig:
     s3_bucket:str
     s3_model_path: str
     s3_model_csv:str
+
+@dataclass
+class ModelInferenceConfig:
+    s3_bucket:str
+    s3_model_weights: str
+    s3_model_weights_best:str

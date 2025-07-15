@@ -1,7 +1,7 @@
 import os
 from CancerClassification.constants import *
 from CancerClassification.utils.utility import read_yaml
-from CancerClassification.entity.config_entity import (DataIngestionConfig, DataPreparationConfig, ModelTrainerConfig)
+from CancerClassification.entity.config_entity import (DataIngestionConfig, DataPreparationConfig, ModelTrainerConfig, ModelInferenceConfig)
 
 class configManager:
     def __init__(self, config_filepath = CONFIG_FILE_PATH, params_filepath = PARAMS_FILE_PATH):
@@ -36,7 +36,17 @@ class configManager:
 
         model_trainer_config = ModelTrainerConfig(
             s3_bucket = config.s3_bucket,
-            s3_model_path = os.path.join(config.s3_bucket, config.s3_model_key, config.model_name),
-            s3_model_csv = os.path.join(config.s3_bucket, config.s3_model_key, config.csv_path)
+            s3_model_path = os.path.join(config.s3_model_key, config.model_folder),
+            s3_model_csv = os.path.join(config.s3_model_key, config.csv_path),
+        )
+        return model_trainer_config
+    
+    def get_model_inference_config(self) -> ModelInferenceConfig:
+        config = self.config.model_trainer
+
+        model_trainer_config = ModelInferenceConfig(
+            s3_bucket = config.s3_bucket,
+            s3_model_weights = os.path.join(config.s3_model_key, config.model_folder, config.model_weights),
+            s3_model_weights_best = os.path.join(config.s3_model_key, config.model_folder, config.model_weights_best),
         )
         return model_trainer_config

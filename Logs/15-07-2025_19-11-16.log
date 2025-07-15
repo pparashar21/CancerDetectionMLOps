@@ -1,0 +1,22 @@
+[ 2025-07-15 19:11:16,590 ] 36 root - INFO - YAML file loaded successfully from: /Users/pparashar21/Desktop/Projects/CancerDetectionMLOps/config/config.yaml
+[ 2025-07-15 19:11:16,591 ] 36 root - INFO - YAML file loaded successfully from: /Users/pparashar21/Desktop/Projects/CancerDetectionMLOps/config/params.yaml
+[ 2025-07-15 19:11:44,364 ] 36 root - INFO - YAML file loaded successfully from: /Users/pparashar21/Desktop/Projects/CancerDetectionMLOps/config/config.yaml
+[ 2025-07-15 19:11:44,366 ] 36 root - INFO - YAML file loaded successfully from: /Users/pparashar21/Desktop/Projects/CancerDetectionMLOps/config/params.yaml
+[ 2025-07-15 19:11:44,421 ] 1352 botocore.credentials - INFO - Found credentials in shared credentials file: ~/.aws/credentials
+[ 2025-07-15 19:11:45,606 ] 227 root - INFO - Downloading s3://multi-cancer-mlops-prasoon/Models/MultiCancerCNN/vit_latest.weights.h5 → /Users/pparashar21/.cache/mcancer_vit/vit_latest.weights.h5 …
+[ 2025-07-15 19:12:53,641 ] 36 root - INFO - YAML file loaded successfully from: /Users/pparashar21/Desktop/Projects/CancerDetectionMLOps/config/config.yaml
+[ 2025-07-15 19:12:53,644 ] 36 root - INFO - YAML file loaded successfully from: /Users/pparashar21/Desktop/Projects/CancerDetectionMLOps/config/params.yaml
+[ 2025-07-15 19:13:08,370 ] 36 root - INFO - YAML file loaded successfully from: /Users/pparashar21/Desktop/Projects/CancerDetectionMLOps/config/config.yaml
+[ 2025-07-15 19:13:08,371 ] 36 root - INFO - YAML file loaded successfully from: /Users/pparashar21/Desktop/Projects/CancerDetectionMLOps/config/params.yaml
+[ 2025-07-15 19:13:25,856 ] 36 root - INFO - YAML file loaded successfully from: /Users/pparashar21/Desktop/Projects/CancerDetectionMLOps/config/config.yaml
+[ 2025-07-15 19:13:25,859 ] 36 root - INFO - YAML file loaded successfully from: /Users/pparashar21/Desktop/Projects/CancerDetectionMLOps/config/params.yaml
+[ 2025-07-15 19:13:29,970 ] 36 root - INFO - YAML file loaded successfully from: /Users/pparashar21/Desktop/Projects/CancerDetectionMLOps/config/config.yaml
+[ 2025-07-15 19:13:29,971 ] 36 root - INFO - YAML file loaded successfully from: /Users/pparashar21/Desktop/Projects/CancerDetectionMLOps/config/params.yaml
+[ 2025-07-15 19:14:11,955 ] 36 root - INFO - YAML file loaded successfully from: /Users/pparashar21/Desktop/Projects/CancerDetectionMLOps/config/config.yaml
+[ 2025-07-15 19:14:11,957 ] 36 root - INFO - YAML file loaded successfully from: /Users/pparashar21/Desktop/Projects/CancerDetectionMLOps/config/params.yaml
+[ 2025-07-15 19:14:20,386 ] 36 root - INFO - YAML file loaded successfully from: /Users/pparashar21/Desktop/Projects/CancerDetectionMLOps/config/config.yaml
+[ 2025-07-15 19:14:20,388 ] 36 root - INFO - YAML file loaded successfully from: /Users/pparashar21/Desktop/Projects/CancerDetectionMLOps/config/params.yaml
+[ 2025-07-15 19:14:22,336 ] 36 root - INFO - YAML file loaded successfully from: /Users/pparashar21/Desktop/Projects/CancerDetectionMLOps/config/config.yaml
+[ 2025-07-15 19:14:22,339 ] 36 root - INFO - YAML file loaded successfully from: /Users/pparashar21/Desktop/Projects/CancerDetectionMLOps/config/params.yaml
+[ 2025-07-15 19:14:25,253 ] 36 root - INFO - YAML file loaded successfully from: /Users/pparashar21/Desktop/Projects/CancerDetectionMLOps/config/config.yaml
+[ 2025-07-15 19:14:25,255 ] 36 root - INFO - YAML file loaded successfully from: /Users/pparashar21/Desktop/Projects/CancerDetectionMLOps/config/params.yaml

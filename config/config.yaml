@@ -14,5 +14,7 @@ data_preparation:
 model_trainer:
   s3_bucket: "multi-cancer-mlops-prasoon"
   s3_model_key: "Models"
-  model_name: "MultiCancerCNN.h5"
+  model_folder: "MultiCancerCNN"
+  model_weights: "vit_latest.weights.h5"
+  model_weights_best: "vit_best.h5"
   csv_path: "MultiCancerCNN.csv"

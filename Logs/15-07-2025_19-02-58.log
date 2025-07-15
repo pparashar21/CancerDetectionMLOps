@@ -1,0 +1,15 @@
+[ 2025-07-15 19:03:02,841 ] 36 root - INFO - YAML file loaded successfully from: /Users/pparashar21/Desktop/Projects/CancerDetectionMLOps/config/config.yaml
+[ 2025-07-15 19:03:02,842 ] 36 root - INFO - YAML file loaded successfully from: /Users/pparashar21/Desktop/Projects/CancerDetectionMLOps/config/params.yaml
+[ 2025-07-15 19:03:02,842 ] 30 root - INFO - Inference module started:
+[ 2025-07-15 19:03:02,843 ] 36 root - INFO - YAML file loaded successfully from: /Users/pparashar21/Desktop/Projects/CancerDetectionMLOps/config/config.yaml
+[ 2025-07-15 19:03:02,843 ] 36 root - INFO - YAML file loaded successfully from: /Users/pparashar21/Desktop/Projects/CancerDetectionMLOps/config/params.yaml
+[ 2025-07-15 19:03:02,857 ] 1352 botocore.credentials - INFO - Found credentials in shared credentials file: ~/.aws/credentials
+[ 2025-07-15 19:03:03,273 ] 40 root - INFO - Hyperparameters loaded
+[ 2025-07-15 19:03:03,980 ] 227 root - INFO - Downloading s3://multi-cancer-mlops-prasoon/Models/MultiCancerCNN/vit_best.h5 → /var/folders/rv/990rgv_x65n8f06w1n428yy00000gn/T/tmpw5ntjg2h/vit_best.h5 …
+[ 2025-07-15 19:05:02,962 ] 48 root - INFO - Model weights loaded into the system
+[ 2025-07-15 19:05:03,199 ] 51 root - INFO - Image preprocessed!
+[ 2025-07-15 19:05:03,808 ] 81 root - INFO - 
+Prediction from the model
+[ 2025-07-15 19:05:03,808 ] 82 root - INFO - image     : /Users/pparashar21/Desktop/Projects/CancerDetectionMLOps/assets/testing_inference/kidney_tumor_0002.jpg
+[ 2025-07-15 19:05:03,808 ] 83 root - INFO - predicted : brain_menin
+[ 2025-07-15 19:05:03,808 ] 84 root - INFO - confidence: 0.5432

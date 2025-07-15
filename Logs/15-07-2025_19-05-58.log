@@ -1,0 +1,15 @@
+[ 2025-07-15 19:06:02,473 ] 36 root - INFO - YAML file loaded successfully from: /Users/pparashar21/Desktop/Projects/CancerDetectionMLOps/config/config.yaml
+[ 2025-07-15 19:06:02,473 ] 36 root - INFO - YAML file loaded successfully from: /Users/pparashar21/Desktop/Projects/CancerDetectionMLOps/config/params.yaml
+[ 2025-07-15 19:06:02,474 ] 30 root - INFO - Inference module started:
+[ 2025-07-15 19:06:02,474 ] 36 root - INFO - YAML file loaded successfully from: /Users/pparashar21/Desktop/Projects/CancerDetectionMLOps/config/config.yaml
+[ 2025-07-15 19:06:02,475 ] 36 root - INFO - YAML file loaded successfully from: /Users/pparashar21/Desktop/Projects/CancerDetectionMLOps/config/params.yaml
+[ 2025-07-15 19:06:02,488 ] 1352 botocore.credentials - INFO - Found credentials in shared credentials file: ~/.aws/credentials
+[ 2025-07-15 19:06:02,972 ] 40 root - INFO - Hyperparameters loaded
+[ 2025-07-15 19:06:03,706 ] 227 root - INFO - Downloading s3://multi-cancer-mlops-prasoon/Models/MultiCancerCNN/vit_best.h5 → /var/folders/rv/990rgv_x65n8f06w1n428yy00000gn/T/tmpah1wjqiq/vit_best.h5 …
+[ 2025-07-15 19:08:01,709 ] 48 root - INFO - Model weights loaded into the system
+[ 2025-07-15 19:08:01,939 ] 51 root - INFO - Image preprocessed!
+[ 2025-07-15 19:08:02,478 ] 81 root - INFO - 
+Prediction from the model
+[ 2025-07-15 19:08:02,478 ] 82 root - INFO - image     : /Users/pparashar21/Desktop/Projects/CancerDetectionMLOps/assets/testing_inference/lymph_fl_0002.jpg
+[ 2025-07-15 19:08:02,478 ] 83 root - INFO - predicted : lymph_mcl
+[ 2025-07-15 19:08:02,478 ] 84 root - INFO - confidence: 1.0000
