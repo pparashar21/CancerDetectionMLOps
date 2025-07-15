@@ -218,3 +218,35 @@ def visualise_patches(patches: np.ndarray, patch_size: int = 64, num_channels: i
         ax.axis("off")
     plt.tight_layout()
     plt.show()
+
+def _download_from_s3(bucket: str, key: str, dst: Path) -> Path:
+    """Download *key* from *bucket* to *dst* if it does not already exist."""
+    if dst.exists():
+        return dst
+    dst.parent.mkdir(parents=True, exist_ok=True)
+    logging.info(f"Downloading s3://{bucket}/{key} → {dst} …")
+    s3 = boto3.client("s3")
+    s3.download_file(bucket, key, str(dst))
+    return dst
+
+
+def _load_and_preprocess(img_path: Path, hp: dict) -> np.ndarray:
+    """
+    Load an image file, resize, normalise and convert it to the
+    `(1, NUM_PATCHES, PATCH_DIM)` tensor expected by the ViT model.
+    """
+    img = cv2.imread(str(img_path))
+    img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+    img = cv2.resize(img, (hp["IMAGE_SIZE"], hp["IMAGE_SIZE"]))
+    img = img / 255.0                                           
+    patch_shape = (hp["PATCH_SIZE"],
+                   hp["PATCH_SIZE"],
+                   hp["NUM_CHANNELS"])
+    patches = patchify(img, patch_shape,
+                       step=hp["PATCH_SIZE"])                 
+    patches = patches.reshape(hp["NUM_PATCHES"],
+                              hp["PATCH_SIZE"]
+                              * hp["PATCH_SIZE"]
+                              * hp["NUM_CHANNELS"])            
+
+    return np.expand_dims(patches.astype(np.float32), axis=0)  
