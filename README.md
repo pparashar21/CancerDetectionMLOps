@@ -6,20 +6,20 @@ An end-to-end MLOps-driven pipeline for multi-cancer detection using image class
 
 ## Dataset
 
-We use the [Multi Cancer Dataset](https://www.kaggle.com/datasets/obulisainaren/multi-cancer) from Kaggle, which contains 130,000 labelled histopathological images across 8 cancer types and 22 subtypes. The full dataset is used for model training.
+We use the [Multi Cancer Dataset](https://www.kaggle.com/datasets/obulisainaren/multi-cancer) from Kaggle, which contains 110,000 labelled histopathological images across 7 cancer types and 22 subtypes. The full dataset is used for model training.
 
 ### Dataset Breakdown  
 
 | Cancer Type                         | Sub-classes | Images |
 |------------------------------------|:-----------:|-------:|
-| Acute Lymphoblastic Leukemia       | 4           | 20 000 |
-| Brain Cancer                       | 3           | 15 000 |
-| Breast Cancer                      | 2           | 10 000 |
-| Cervical Cancer                    | 5           | 25 000 |
-| Kidney Cancer                      | 2           | 10 000 |
-| Lung and Colon Cancer              | 5           | 25 000 |
-| Lymphoma                           | 3           | 15 000 |
-| Oral Cancer                        | 2           | 10 000 |
+| Brain Cancer                       | 3           | 15,000 |
+| Breast Cancer                      | 2           | 10,000 |
+| Cervical Cancer                    | 5           | 25,000 |
+| Kidney Cancer                      | 2           | 10,000 |
+| Lung and Colon Cancer              | 5           | 25,000 |
+| Lymphoma                           | 3           | 15,000 |
+| Oral Cancer                        | 2           | 10,000 |
+| Total                              | 22          | 110,000 |
 ---
 
 ## Pipeline Overview
@@ -57,45 +57,45 @@ The project follows a standard MLOps pipeline architecture: ![Workflow Diagram](
 
 - Clone the repository and run the main pipeline: 
 
-```bash
-git clone https://github.com/pparashar21/CancerDetectionMLOps.git
-cd CancerDetectionMLOps
-
-conda create -n multicancer python=3.11 -y
-conda activate multicancer
-pip install -r requirements.txt
-```
-Add a .env file with the required environment variables (sample structure mentioned below), then:
-
-```bash
-# train (downloads data → S3 → SageMaker → logs metrics)
-python -m CancerClassification.pipeline.trainer_pipeline
-
-# inference UI
-streamlit run app.py
-```
+  ```bash
+  git clone https://github.com/pparashar21/CancerDetectionMLOps.git
+  cd CancerDetectionMLOps
+  
+  conda create -n multicancer python=3.11 -y
+  conda activate multicancer
+  pip install -r requirements.txt
+  ```
+  Add a .env file with the required environment variables (sample structure mentioned below), then:
+  
+  ```bash
+  # train (downloads data → S3 → SageMaker → logs metrics)
+  python -m CancerClassification.pipeline.trainer_pipeline
+  
+  # inference UI
+  streamlit run app.py
+  ```
 
 - If you prefer docker environment, (please ensure you have Docker Daemon installed)
 
-```bash
-git clone https://github.com/pparashar21/CancerDetectionMLOps.git
-cd CancerDetectionMLOps
-```
-Add a .env file with the required environment variables (sample structure mentioned below), then:
-
-```bash
-docker build -t cancer-mlops .
-
-docker run cancer-mlops
-```
+  ```bash
+  git clone https://github.com/pparashar21/CancerDetectionMLOps.git
+  cd CancerDetectionMLOps
+  ```
+  Add a .env file with the required environment variables (sample structure mentioned below), then:
+  
+  ```bash
+  docker build -t cancer-mlops .
+  
+  docker run cancer-mlops
+  ```
 
 - For the .env file, a sample structure would look like:
 
-```bash
-AWS_ACCESS_KEY_ID=""
-AWS_SECRET_ACCESS_KEY=""
-AWS_DEFAULT_REGION=""
-KAGGLE_USERNAME=""
-KAGGLE_KEY=""
-```
+  ```bash
+  AWS_ACCESS_KEY_ID=""
+  AWS_SECRET_ACCESS_KEY=""
+  AWS_DEFAULT_REGION=""
+  KAGGLE_USERNAME=""
+  KAGGLE_KEY=""
+  ```
 
