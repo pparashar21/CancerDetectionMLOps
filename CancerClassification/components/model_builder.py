@@ -1,5 +1,5 @@
 """
-model_trainer.py
+model_builder.py
 ----------------
 
 Component to train the Vision Transformer model for Multi-Cancer Detection.

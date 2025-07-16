@@ -1,3 +1,25 @@
+"""trainer_pipeline.py
+=====================
+
+High-level script that chains data preparation and model training for
+the cancer-classification project.
+
+Workflow
+--------
+1. Instantiate :class:`configManager` to obtain all runtime settings.
+2. Launch :class:`DataPreparation` - builds train/val/test `tf.data.Dataset`s.
+3. Pass those datasets to :class:`ModelTrainer`, which:
+   * constructs the ViT architecture,
+   * trains it (with early-stopping & checkpoints),
+   * evaluates on the test split,
+   * uploads metrics and the SavedModel directory to S3.
+
+The script is intended to be executed from the CLI:
+
+```bash
+python -m CancerClassification.pipeline.trainer_pipeline
+"""
+
 import sys
 from CancerClassification.config.configuration import configManager
 from CancerClassification.components.data_preparation import DataPreparation
