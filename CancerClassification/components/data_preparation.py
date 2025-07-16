@@ -1,3 +1,28 @@
+"""
+data_preparation.py
+===================
+
+Turn raw S3 image keys into **TensorFlow `tf.data.Dataset` objects** that the
+ViT model can train on.
+
+High-level workflow
+-------------------
+1. **Read hyper-parameters** (image size, patch size, batch size, …) from
+   *params.yaml* and augment them with values discovered at runtime
+   (e.g. `CLASS_NAMES`).
+2. **List images in S3** and create three python lists:
+   *train*, *validation*, *test*.
+3. **Map → Batch → Prefetch** those lists into `tf.data.Dataset`s using the
+   parsing utilities in `CancerClassification.utils.utility`.
+
+Typical usage
+-------------
+The object is usually instantiated by `model_trainer.py`, but you can also run
+this file directly for a quick sanity-check:
+
+```bash
+python -m CancerClassification.components.data_preparation
+"""
 import sys
 import os
 import tensorflow as tf

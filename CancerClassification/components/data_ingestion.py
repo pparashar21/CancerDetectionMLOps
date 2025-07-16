@@ -1,3 +1,16 @@
+"""
+data_ingestion.py
+=================
+
+End-to-end routine for **downloading the Kaggle dataset, un-zipping it, and
+pushing the raw images to S3** so the rest of the pipeline can stay 100 %
+cloud-native.
+
+Typical usage
+-------------
+```bash
+python -m CancerClassification.components.data_ingestion
+"""
 import sys
 import os
 import zipfile
