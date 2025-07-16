@@ -18,6 +18,7 @@ The project follows a standard MLOps pipeline architecture: ![Workflow Diagram](
 - **Data Ingestion**: Downloads and extracts Kaggle dataset; uploads it to AWS S3 with optimised multipart upload.
 - **Preprocessing**: Image transformations, normalisation, and formatting for model consumption.
 - **Training**: Custom CNN model trained from scratch using PyTorch, executed on AWS SageMaker.
+![Workflow Diagram](assets/SageMaker_training.png)
 - **Evaluation**: Model performance is currently evaluated using accuracy and visual confusion matrix. Achieved **91.5% accuracy** on test set.
 - **Deployment** : Will be containerised using Docker and exposed via Streamlit for real-time inference.
 
