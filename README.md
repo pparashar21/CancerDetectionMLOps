@@ -19,7 +19,7 @@ The project follows a standard MLOps pipeline architecture: ![Workflow Diagram](
 - **Preprocessing**: Image transformations, normalisation, and formatting for model consumption.
 - **Training**: Custom CNN model trained from scratch using PyTorch, executed on AWS SageMaker.
 - **Evaluation**: Model performance is currently evaluated using accuracy and visual confusion matrix. Achieved **91.5% accuracy** on test set.
-- **Deployment** *(in progress)*: Will be containerised using Docker and exposed via Flask API for real-time inference.
+- **Deployment** : Will be containerised using Docker and exposed via Streamlit for real-time inference.
 
 ---
 
@@ -42,26 +42,47 @@ The project follows a standard MLOps pipeline architecture: ![Workflow Diagram](
 
 ## Sample Usage
 
-Clone the repository and run the main pipeline: 
+- Clone the repository and run the main pipeline: 
 
 ```bash
 git clone https://github.com/pparashar21/CancerDetectionMLOps.git
 cd CancerDetectionMLOps
 
-python -m venv venv
-
-source venv/bin/activate  
-
-#SageMaker
-sudo yum install -y libgit2 libgit2-devel
-
+conda create -n multicancer python=3.11 -y
+conda activate multicancer
 pip install -r requirements.txt
+```
+Add a .env file with the required environment variables (sample structure mentioned below), then:
 
-# Run the full pipeline
-python main.py
+```bash
+# train (downloads data → S3 → SageMaker → logs metrics)
+python -m CancerClassification.pipeline.trainer_pipeline
+
+# inference UI
+streamlit run app.py
 ```
 
-Make sure your environment variables are set up for:
-- Kaggle API key (kaggle.json)
-- AWS credentials (~/.aws/credentials or environment variables)
+- If you prefer docker environment, (please ensure you have Docker Daemon installed)
+
+```bash
+git clone https://github.com/pparashar21/CancerDetectionMLOps.git
+cd CancerDetectionMLOps
+```
+Add a .env file with the required environment variables (sample structure mentioned below), then:
+
+```bash
+docker build -t cancer-mlops .
+
+docker run cancer-mlops
+```
+
+- For the .env file, a sample structure would look like:
+
+```bash
+AWS_ACCESS_KEY_ID=""
+AWS_SECRET_ACCESS_KEY=""
+AWS_DEFAULT_REGION=""
+KAGGLE_USERNAME=""
+KAGGLE_KEY=""
+```
 
